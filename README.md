@@ -9,9 +9,15 @@ https://arxiv.org/abs/2101.12720
 pip install ...
 ```
 
+## PFA
 
-### Parameters (* required)
-- **path (String):** path to the input CSV file
+```Python
+pfa(path*, number_sweeps, cluster_size, alpha, min_n_datapoints_a_bin, shuffle_feature_numbers, frac, claculate_mutual_information, basis_log_mutual_information)
+
+```
+
+### Parameters
+- **path (String, required):** path to the input CSV file
 - **number_sweeps (int, default=1):** Number of sweeps of the PFA. The result of the last sweep is returned. In addition, the return of each sweep are interesected and returned as well.
 - **cluster_size (int, default=50):** Number of nodes of a subgraph in the principal_feature_analysis.
 - **alpha (float, default=0.01):** Level of significance.
