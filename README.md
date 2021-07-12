@@ -9,7 +9,7 @@ https://arxiv.org/abs/2101.12720
 pip install ...
 ```
 
-## PFA
+## Usage
 
 ```Python
 pfa(path*, number_sweeps, cluster_size, alpha, min_n_datapoints_a_bin, shuffle_feature_numbers, frac, claculate_mutual_information, basis_log_mutual_information)
