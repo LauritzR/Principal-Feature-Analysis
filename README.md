@@ -17,7 +17,7 @@ pfa(path*, number_sweeps, cluster_size, alpha, min_n_datapoints_a_bin, shuffle_f
 ```
 
 ### Parameters
-- **path (String, required):** path to the input CSV file
+- **path (String, required):** Path to the input CSV file. It is important to note that row 0 of the input file should contain the system state.
 - **number_sweeps (int, default=1):** Number of sweeps of the PFA. The result of the last sweep is returned. In addition, the return of each sweep are interesected and returned as well.
 - **cluster_size (int, default=50):** Number of nodes of a subgraph in the principal_feature_analysis.
 - **alpha (float, default=0.01):** Level of significance.
