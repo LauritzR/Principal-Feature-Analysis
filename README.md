@@ -41,3 +41,5 @@ A csv file where for each sweep [i] the first column is the feature number refer
 ### Returns
 - **pf_from_intersection (list):** A list with content analog to the file principal_features_depending_system_state_intersection.txt.
 - **data_frame_feature_mutual_information (pandas.DataFrame, if calculate_mutual_information=True):** A Pandas data frame that contains the mutual information with the feature (index related to the row in the input csv) with the system state (row 0 in the input csv).
+
+## Example
