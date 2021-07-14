@@ -52,3 +52,28 @@ from principle_feature_analysis import find_relevant_principal_features, get_mut
 
 
 ## Example
+
+ For this example we generated a dataset using the ```make classification``` function from ```sklearn.datasets```. The dataset consists of 2000 datapoints with 100 features each. Only 50 of those 100 features are informative, the rest is redundant.
+ 
+ If you want to generate a similar dataset yourself use the following code. The resulting csv can be used directly as input for the Principle Feature Analysis.
+
+ ```Python
+import numpy as np
+from sklearn.datasets import make_classification
+
+X,y = make_classification(n_samples=2000, n_features=100, n_informative=50, n_redundant=50, random_state=7)
+
+data = np.column_stack((y, X))
+
+np.savetxt("dataset.csv", data.T, delimiter=",")
+```
+
+Now we import and call the pfa function. We use the default parameters and only set the path to our previously generated .csv file.
+
+```Python
+from principle_feature_analysis import pfa
+
+path = "dataset.csv"
+principle_features, mutual_information = pfa(path)
+
+```
