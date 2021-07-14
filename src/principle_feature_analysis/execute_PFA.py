@@ -74,3 +74,5 @@ def pfa(path, number_sweeps=1, cluster_size=50, alpha=0.01, min_n_datapoints_a_b
         print("Calculating mutual information")
         data_frame_feature_mutual_information=get_mutual_information(data,pf_from_intersection,min_n_datapoints_a_bin,basis_log_mutual_information)
         print(data_frame_feature_mutual_information)
+    
+    return pf_from_intersection, data_frame_feature_mutual_information
