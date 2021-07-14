@@ -6,13 +6,15 @@ https://arxiv.org/abs/2101.12720
 
 ## Installation
 ```
-pip install ...
+pip install principle_feature_analysis (Placeholder)
 ```
 
 ## Usage
 
 ```Python
-pfa(path*, number_sweeps, cluster_size, alpha, min_n_datapoints_a_bin, shuffle_feature_numbers, frac, claculate_mutual_information, basis_log_mutual_information)
+from principle_feature_analysis import pfa # import the main pfa function
+
+pfa(path*, number_sweeps, cluster_size, alpha, min_n_datapoints_a_bin, shuffle_feature_numbers, frac, claculate_mutual_information, basis_log_mutual_information) # function call
 ```
 
 ### Parameters
@@ -40,5 +42,13 @@ A csv file where for each sweep [i] the first column is the feature number refer
 ### Returns
 - **pf_from_intersection (list):** A list with content analog to the file principal_features_depending_system_state_intersection.txt.
 - **data_frame_feature_mutual_information (pandas.DataFrame, if calculate_mutual_information=True):** A Pandas data frame that contains the mutual information with the feature (index related to the row in the input csv) with the system state (row 0 in the input csv).
+
+
+## Advanced
+The principle_feature_analysis package also grants access to other functions used for the principle component analysis algorithm. In case you want to access those you can import them like this.
+```Python
+from principle_feature_analysis import find_relevant_principal_features, get_mutual_information, principal_feature_analysis
+```
+
 
 ## Example
