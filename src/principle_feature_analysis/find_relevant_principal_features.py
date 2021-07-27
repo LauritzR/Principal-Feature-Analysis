@@ -1,19 +1,17 @@
-# Code published under creative commons license CC BY-NC-SA
 # Copyright with the authors of the publication "A principal feature analysis"
 
 import numpy as np
 import scipy.stats
 import pandas as pd
-from .principal_feature_analysis import principal_feature_analysis
+from principal_feature_analysis import principal_feature_analysis
 
-def find_relevant_principal_features(data,cluster_size,alpha,min_n_datapoints_a_bin,shuffle_feature_numbers,frac):
+def find_relevant_principal_features(data,number_output_functions,cluster_size,alpha,min_n_datapoints_a_bin,shuffle_feature_numbers,frac):
     # In this function the binning is done, the graph is dissected and the relevant features/variables are detected
     if frac<1: # if frac<1 the feature analysis is done only the fraction of the data, randomly sampled
         data=data.sample(frac=frac,axis='columns',replace=False)
     data=data.to_numpy()
     m = data.shape[0] #number features
     n = data.shape[1] #number of data points
-
     l = [0 for i in range(0, m)]  # list of lists with the points of support for the binning
     freq_data = [0 for i in range(0, m)] # list of histograms
     left_features = [i for i in range(0, m)]  # list of features that is step by step reduced to the relevant ones
@@ -46,7 +44,7 @@ def find_relevant_principal_features(data,cluster_size,alpha,min_n_datapoints_a_
                     list_points_of_support.insert(0, datapoints[0])
             else:
                 list_points_of_support.append(datapoints[0])
-            list_points_of_support.append(datapoints[-1] + 0.1) # Add last point of support such that last data point is included (half open interals in python!)
+            list_points_of_support.append(datapoints[-1] + 0.1) # Add last point of support such that last data point is included (half open interals in Python!)
             if datapoints[datapoints >= list_points_of_support[-2]].size < min_n_datapoints_a_bin: # if last bin has not at least min_n_datapoints_a_bin fuse it with the one before the last bin
                 if len(list_points_of_support) > 2:     # Test if there are at least 3 points of support (only two can happen if there only constant values at the beginning and only less than n_min_datapoints_a_bin in the end)
                     list_points_of_support.pop(-2)
@@ -55,21 +53,22 @@ def find_relevant_principal_features(data,cluster_size,alpha,min_n_datapoints_a_
     print("Binning done!")
     print("List of features with constant values:")
     print(constant_features)
-    if 0 in constant_features or len(freq_data[0]) < 2:  # Warn if the output function is constant e.g. due to an unsuitable binning
-        print("Warning: System state is constant!")
+    for id_output in range(0,number_output_functions):
+        if id_output in constant_features or len(freq_data[id_output]) < 2:  # Warn if the output function is constant e.g. due to an unsuitable binning
+            print("Warning: System state " + str(id_output) +  " is constant!")
 
     print("Starting principal feature analysis!")
     # list_principal_features = list of resulting principal features
     # smaller_than5 = percent of chi-square tests with bins less than 5 data points
     # smaller_than1 = percent of chi-square tests with bins less than 1 data point
-    list_principal_features, smaller_than5, smaller_than1 = principal_feature_analysis(cluster_size, data, freq_data, l, left_features, alpha, shuffle_feature_numbers)
+    list_principal_features, smaller_than5, smaller_than1 = principal_feature_analysis(cluster_size, data, number_output_functions, freq_data, l, left_features, alpha, shuffle_feature_numbers)
 
     # Assign global index to each principal feature
     list_principal_features_global_indices = []
     for i in list_principal_features:
         intermediate_list = []
         for j in i:
-            shift_variable = j + 1  # Output function, which is not considered in the PVA, is the value 0 in left_features
+            shift_variable = j + number_output_functions  # Output functions, which are not considered in the PFA, are the values 0,1,...,number_output_functions-1 in left_features
             intermediate_list.append(left_features[shift_variable])
         list_principal_features_global_indices.append(intermediate_list)
 
@@ -78,8 +77,8 @@ def find_relevant_principal_features(data,cluster_size,alpha,min_n_datapoints_a_
 
 
 
-    # identify principal features depending on system state again using chi-square
-    print("Start calculating dependency on system state")
+    # identify principal features related to the output function again using chi-square
+    print("Start calculating dependence on system state")
     principal_features_depending_on_system_state=[]
     principal_features_not_depending_on_system_state = []
     counter_bins_less_than5_relevant_principal_features=0 # number of chi-square tests with less than 5 datapoints a bin
@@ -93,17 +92,23 @@ def find_relevant_principal_features(data,cluster_size,alpha,min_n_datapoints_a_
         # for each feature within the current complete graph perform a chi-square test
         for j in i:
             if len(freq_data[j]) > 1:
-                counter_number_chi_square_tests_relevant_principal_features +=1
-                freq_data_product = np.histogram2d(data[0, :], data[j, :],
-                                                bins=(l[0], l[j]))[0]
-                expfreq = np.outer(freq_data[0], freq_data[j]) / n
-                if sum(expfreq.flatten() < 5) > 0:
-                    counter_bins_less_than5_relevant_principal_features += 1
-                if sum(expfreq.flatten() < 1) > 0:
-                    counter_bins_less_than1_relevant_principal_features += 1
-                pv = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten())[1]
-                # if p-value pv is less than alpha the hypothesis that j is independent of the output function is rejected
-                if pv <= alpha:
+                dependent = 0 # Flag for the input feature j if there is a relation to one output-function
+                for id_output in range(0,number_output_functions):
+                    counter_number_chi_square_tests_relevant_principal_features +=1
+                    freq_data_product = np.histogram2d(data[id_output, :], data[j, :],
+                                                bins=(l[id_output], l[j]))[0]
+                    expfreq = np.outer(freq_data[id_output], freq_data[j]) / n
+                    if sum(expfreq.flatten() < 5) > 0:
+                        counter_bins_less_than5_relevant_principal_features += 1
+                    if sum(expfreq.flatten() < 1) > 0:
+                        counter_bins_less_than1_relevant_principal_features += 1
+                    pv = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten(),ddof=-1)[1]
+                    # ddof=-1 to have the degrees of freedom of the chi square eaual the number of bins, see corresponding paper (Appendix) for details
+                    # if p-value pv is less than alpha the hypothesis that j is independent of the output function is rejected
+                    if pv <= alpha:
+                        dependent=1
+                        break
+                if dependent==1:
                     intermediate_list_depending_on_system_state.append(j)
                 else:
                     intermediate_list_not_depending_on_system_state.append(j)
