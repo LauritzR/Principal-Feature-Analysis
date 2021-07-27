@@ -10,13 +10,8 @@ import numpy as np
 
 path="/Users/i534747/PycharmProjects/Midgard/Code Paper/all_cases_labeled_train.csv"       # path to the input CSV file
 
-# The csv file's content is an m x n Matrix with m - number components of output-function = number features and n = number of data points
-# where the first number components of output-function rows contain the value of the vector-valued output function for each of the n data points
-# e.g. in case of a one-dimensional output function, the first row can be the label for each data point
-data = pd.read_csv(path, sep=',', header=None)
-# pf_ds = principal features related to output functions, pf = all principal features
-start_time=time.time()
-list_pf_ds=[]
+
+
 
 # paramters for the PFA
 number_output_functions=1 # Number of output features that are to be modeled, i.e. the number of components of the vector-valued output-function. The values are stored in the first number_output_functions rows of the csv-file.
@@ -34,8 +29,15 @@ basis_log_mutual_information=2 # basis of the logarithm used in the calculation 
 
 
 def pfa(path, number_sweeps=1, cluster_size=50, alpha=0.01, min_n_datapoints_a_bin=500, shuffle_feature_numbers=0, frac=1, claculate_mutual_information=0, basis_log_mutual_information=2):
-    
+    # pf_ds = principal features related to output functions, pf = all principal features
+    start_time=time.time()
+    list_pf_ds=[]
 
+
+    # The csv file's content is an m x n Matrix with m - number components of output-function = number features and n = number of data points
+    # where the first number components of output-function rows contain the value of the vector-valued output function for each of the n data points
+    # e.g. in case of a one-dimensional output function, the first row can be the label for each data point
+    data = pd.read_csv(path, sep=',', header=None)
     for sweep in range(0,number_sweeps):
         print("Sweep number: " + str(sweep+1))
         pf_ds,pf,indices_principal_feature_values=find_relevant_principal_features(data,number_output_functions,cluster_size,alpha,min_n_datapoints_a_bin,shuffle_feature_numbers,frac)
