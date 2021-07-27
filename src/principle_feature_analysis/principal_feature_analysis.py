@@ -1,4 +1,3 @@
-# Code published under creative commons license CC BY-NC-SA
 # Copyright with the authors of the publication "A principal feature analysis"
 
 import networkx as nx
@@ -7,9 +6,9 @@ import scipy.stats
 import random
 
 # see paper Algorithm 2
-def principal_feature_analysis(cluster_size,data,freq_data,l,left_features,alpha,shuffle_feature_numbers):
-    number_nodes= len(left_features) - 1  # Subtract the output function 0
-    list_of_nodes= left_features[1:].copy()  # Take only the features and not the output function
+def principal_feature_analysis(cluster_size,data,number_output_functions,freq_data,l,left_features,alpha,shuffle_feature_numbers):
+    number_nodes= len(left_features) - number_output_functions  # Subtract the number of components of the output function
+    list_of_nodes= left_features[number_output_functions:].copy()  # Take only the features and not the components of the output function
     m= data.shape[0]    # number of rows of the data matrix
     n = data.shape[1]   # number of columns of the data matrix
     number_chisquare_tests=0    # number of total chi-square tests
@@ -52,11 +51,13 @@ def principal_feature_analysis(cluster_size,data,freq_data,l,left_features,alpha
                         freq_data_product = np.histogram2d(data[cluster[i], :], data[cluster[j], :],
                                                        bins=(l[cluster[i]], l[cluster[j]]))[0]
                         expfreq = np.outer(freq_data[cluster[i]], freq_data[cluster[j]]) / n
+
                         if sum(expfreq.flatten() < 5) > 0:
                             counter_bin_less_than5 += 1
                         if sum(expfreq.flatten() < 1) > 0:
                             counter_bin_less_than1 += 1
-                        pv = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten())[1]
+                        pv = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten(),ddof=-1)[1]
+                        # ddof=-1 to have the degrees of freedom of the chi square eaual the number of bins, see corresponding paper (Appendix) for details
                         # if p-value pv is less than alpha the hypothesis that j is independent of i is rejected
                         if pv <= alpha:
                             global_adjm[cluster[i], cluster[j] ] = 1
