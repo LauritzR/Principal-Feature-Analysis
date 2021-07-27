@@ -50,7 +50,7 @@ The principle_feature_analysis package also grants access to other functions use
 from principle_feature_analysis import find_relevant_principal_features, get_mutual_information, principal_feature_analysis
 ```
 
-
+<!---
 ## Example
 
  For this example we generated a dataset using the ```make classification``` function from ```sklearn.datasets```. The dataset consists of 2000 datapoints with 100 features each. Only 50 of those 100 features are informative, the rest is redundant.
@@ -77,3 +77,4 @@ path = "dataset.csv"
 principle_features, mutual_information = pfa(path)
 
 ```
+--->
