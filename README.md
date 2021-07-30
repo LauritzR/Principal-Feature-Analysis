@@ -1,16 +1,16 @@
-# Principle-Feature-Analysis
+# Principal-Feature-Analysis
 https://arxiv.org/abs/2101.12720
 
 
 ## Installation
 ```
-pip install principle_feature_analysis (Placeholder)
+pip install principal_feature_analysis (Placeholder)
 ```
 
 ## Usage
 
 ```Python
-from principle_feature_analysis import pfa # import the main pfa function
+from principal_feature_analysis import pfa # import the main pfa function
 
 pfa(path*, number_output_functions, number_sweeps, cluster_size, alpha, min_n_datapoints_a_bin, shuffle_feature_numbers, frac, claculate_mutual_information, basis_log_mutual_information) # function call
 ```
@@ -44,36 +44,7 @@ A csv file where for each sweep [i] the first column is the feature number refer
 
 
 ## Advanced
-The principle_feature_analysis package also grants access to other functions used for the principle component analysis algorithm. In case you want to access those you can import them like this.
+The principal_feature_analysis package also grants access to other functions used for the principal component analysis algorithm. In case you want to access those you can import them like this.
 ```Python
-from principle_feature_analysis import find_relevant_principal_features, get_mutual_information, principal_feature_analysis
+from principal_feature_analysis import find_relevant_principal_features, get_mutual_information, principal_feature_analysis
 ```
-
-<!---
-## Example
-
- For this example we generated a dataset using the ```make classification``` function from ```sklearn.datasets```. The dataset consists of 2000 datapoints with 100 features each. Only 50 of those 100 features are informative, the rest is redundant.
- 
- If you want to generate a similar dataset yourself use the following code. The resulting csv can be used directly as input for the Principle Feature Analysis.
-
- ```Python
-import numpy as np
-from sklearn.datasets import make_classification
-
-X,y = make_classification(n_samples=2000, n_features=100, n_informative=50, n_redundant=50, random_state=7)
-
-data = np.column_stack((y, X))
-
-np.savetxt("dataset.csv", data.T, delimiter=",")
-```
-
-Now we import and call the pfa function. We use the default parameters and only set the path to our previously generated .csv file.
-
-```Python
-from principle_feature_analysis import pfa
-
-path = "dataset.csv"
-principle_features, mutual_information = pfa(path)
-
-```
---->
