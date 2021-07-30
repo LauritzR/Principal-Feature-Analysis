@@ -14,11 +14,12 @@ pip install principle_feature_analysis (Placeholder)
 ```Python
 from principle_feature_analysis import pfa # import the main pfa function
 
-pfa(path*, number_sweeps, cluster_size, alpha, min_n_datapoints_a_bin, shuffle_feature_numbers, frac, claculate_mutual_information, basis_log_mutual_information) # function call
+pfa(path*, number_output_functions, number_sweeps, cluster_size, alpha, min_n_datapoints_a_bin, shuffle_feature_numbers, frac, claculate_mutual_information, basis_log_mutual_information) # function call
 ```
 
 ### Parameters
-- **path (String, required):** Path to the input CSV file. It is important to note that row 0 of the input file should contain the system state.
+- **path (String, required):** Path to the input CSV file.
+- **number_output_functions (int, default=1):** Number of output features that are to be modeled, i.e. the number of components of the vector-valued output-function. The values are stored in the first number_output_functions rows of the csv-file.
 - **number_sweeps (int, default=1):** Number of sweeps of the PFA. The result of the last sweep is returned. In addition, the return of each sweep are interesected and returned as well.
 - **cluster_size (int, default=50):** Number of nodes of a subgraph in the principal_feature_analysis.
 - **alpha (float, default=0.01):** Level of significance.
@@ -28,7 +29,7 @@ pfa(path*, number_sweeps, cluster_size, alpha, min_n_datapoints_a_bin, shuffle_f
 - **calculate_mutual_information (bool, default=False):** If True the mutual information with features from the PFA with the system state is calculated.
 - **basis_log_mutual_information (int. default=2):** Basis of the logarithm used in the calculation of the mutual information.
 
-### Files
+### Output Files
 - **principal_features_depending_system_state[i].txt:**
 Lists the indices (related to the rows of the input csv) of the features that depend on the system state (row 0) where [i] is replaced by the number of sweeps. Each row of this file is a subgraph that could not be divided further where a * separates the features on which the system state depends (before *) and the ones on which the system state does not depend (after *).
 - **principal_features_depending_system_state_intersection.txt:**
