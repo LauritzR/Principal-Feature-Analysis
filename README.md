@@ -1,6 +1,4 @@
 # Principle-Feature-Analysis
-
-## Introduction
 https://arxiv.org/abs/2101.12720
 
 
