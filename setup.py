@@ -7,7 +7,7 @@ setuptools.setup(
     name="principal-feature-analysis",
     version="0.0.1",
     author="Tim Breitenbach & Lauritz Rasbach",
-    author_email="tim.breitenbach@mathematik.uni-wuerzburg.de & rasbachlauritz@googlemail.com",
+    author_email="tim.breitenbach@mathematik.uni-wuerzburg.de, rasbachlauritz@googlemail.com",
     description="The first package for Principal Feature Analysis",
     long_description=long_description,
     long_description_content_type="text/markdown",
