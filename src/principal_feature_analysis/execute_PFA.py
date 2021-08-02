@@ -1,8 +1,8 @@
 # Copyright with the authors of the publication "A principal feature analysis"
 
 
-from find_relevant_principal_features import find_relevant_principal_features
-from get_mutual_information import get_mutual_information
+from .find_relevant_principal_features import find_relevant_principal_features
+from .get_mutual_information import get_mutual_information
 import time
 import pandas as pd
 import numpy as np
