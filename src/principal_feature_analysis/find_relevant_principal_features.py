@@ -3,7 +3,7 @@
 import numpy as np
 import scipy.stats
 import pandas as pd
-from principal_feature_analysis import principal_feature_analysis
+from .principal_feature_analysis import principal_feature_analysis
 
 def find_relevant_principal_features(data,number_output_functions,cluster_size,alpha,min_n_datapoints_a_bin,shuffle_feature_numbers,frac):
     # In this function the binning is done, the graph is dissected and the relevant features/variables are detected
