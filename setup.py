@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: BSD 3-Clause License",
+        "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
     ],
     package_dir={"": "src"},
