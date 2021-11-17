@@ -8,11 +8,6 @@ import pandas as pd
 import numpy as np
 
 
-path="/Users/i534747/PycharmProjects/Midgard/Code Paper/all_cases_labeled_train.csv"       # path to the input CSV file
-
-
-
-
 # paramters for the PFA
 # number_output_functions: Number of output features that are to be modeled, i.e. the number of components of the vector-valued output-function. The values are stored in the first number_output_functions rows of the csv-file.
 # number_sweeps: Number of sweeps of the PFA. The result of the last sweep is returned.
