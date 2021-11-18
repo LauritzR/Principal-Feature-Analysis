@@ -1,6 +1,6 @@
 # Examples
 
-Here you can find three csv-files providing examples to get your hands on the execution of the principal-feature-analysis.
+Here you can find three csv-files providing examples to get your hands on the execution of the principal-feature-analysis. The data has been generated with the test_csv_generator_1dim.py and test_csv_generator_2dim.py scripts.
 
 The first step is always the import. You can simply do that via
 ```Python
