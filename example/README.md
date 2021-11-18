@@ -17,7 +17,7 @@ pfa("test_PFA_1dim_cont_y.csv")
 ```
 
 ## Example 2: test_PFA_1dim_disc_y.csv
-Now we have discrete data and an output function which is still 1-dimensional. This does not change anything, the execution still looks like before:
+Now, we have 1-dimensional output function with a discrete co-domain instead of a continuous one. This does not change anything, the execution still looks like before:
 ```Python
 pfa("test_PFA_1dim_disc_y.csv")
 ```
