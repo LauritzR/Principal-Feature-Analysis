@@ -11,7 +11,7 @@ It is always required to set the path to the csv-file as a parameter. Depending 
 
 
 ## Example 1: test_PFA_1dim_cont_y.csv
-The features in this file are continuous and the output function is 1-dimensional. This means we do not have to adjust any hyperparameters as the standard values already cover this case. The code for execution looks the following:
+The features in this file are continuous and the output function is 1-dimensional with a continuous co-domain. This means we do not have to adjust any hyperparameters as the standard values already cover this case. The code for execution looks the following:
 ```Python
 pfa("test_PFA_1dim_cont_y.csv")
 ```
@@ -23,7 +23,7 @@ pfa("test_PFA_1dim_disc_y.csv")
 ```
 
 ## Example 3: test_PFA_2dim_cont_y.csv
-The output function in this data is 2-dimensional with continuous features, so we have to adjust the **number_output_functions** parameter.
+The output function in this data is 2-dimensional again with a continuous co-domain and continuous features, so we have to adjust the **number_output_functions** parameter.
 ```Python
 pfa("test_PFA_2dim_cont_y.csv", number_output_functions=2)
 ```
