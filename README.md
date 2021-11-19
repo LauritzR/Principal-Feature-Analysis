@@ -1,4 +1,5 @@
 # Principal-Feature-Analysis
+Accepted in Journal of Computational Science
 https://arxiv.org/abs/2101.12720
 
 
