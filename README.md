@@ -6,7 +6,7 @@ https://arxiv.org/abs/2101.12720
 
 ## Installation
 ```
-pip install principal_feature_analysis (Placeholder)
+pip install principal-feature-analysis
 ```
 
 ## Usage
