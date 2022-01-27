@@ -33,36 +33,40 @@ def get_mutual_information(data,number_output_functions,list_variables,min_n_dat
     left_features = [i for i in range(0, m)]
     constant_features = []
 
-    for i in range(0, m):
+    for i in range(0, m): 
         mindata = min(data[i, :])
         maxdata = max(data[i, :])
         if maxdata <= mindata:
-            print("Variable #"f"{i}" " has only constant values")
+            print("Feature #"f"{list_variables[i]}" " has only constant values")
             left_features.remove(i)
-            constant_features.append(i)
+            constant_features.append(list_variables[i])
         else:
-            list_points_of_support=[]
-            datapoints=data[i,:].copy()
+            # start the binning by sorting the data points
+            list_points_of_support = []
+            datapoints = data[i, :].copy()
             datapoints.sort()
-            counter_points=0
-            last_complete_bin=0
-            for point in range(0,datapoints.size):
-                if point>=(datapoints.size-1):
-                    list_points_of_support.append(datapoints[datapoints.size-1])
+            last_index = 0
+            # go through the data points and bin them
+            for point in range(0, datapoints.size):
+                if point >= (datapoints.size - 1):  # if end of the data points leave the for-loop
                     break
-                counter_points += 1
-                if counter_points>=min_n_datapoints_a_bin and datapoints[point]<datapoints[point+1]:
-                    list_points_of_support.append(datapoints[point])
-                    counter_points=0
-                    last_complete_bin=point
-            if list_points_of_support[0]>datapoints[0]:
-                list_points_of_support.insert(0,datapoints[0])
-            list_points_of_support.append(list_points_of_support[-1]+0.1)
-            if datapoints[datapoints>=list_points_of_support[-2]].size<min_n_datapoints_a_bin:
-                if len(list_points_of_support)>2:
+                # close a bin if there are at least min_n_datapoints_a_bin and the next value is bigger
+                if datapoints[last_index:point + 1].size >= min_n_datapoints_a_bin and datapoints[point] < datapoints[point + 1]:
+                    list_points_of_support.append(datapoints[point + 1])
+                    last_index = point + 1
+            if len(list_points_of_support) > 0: # test that there is at least one point of support (it can be if there are only constant value up to the first ones which are less than min_n_datapoints_a_bin
+                if list_points_of_support[0] > datapoints[0]: # add the first value as a point of support if it does not exist (less than min_n_datapoints_a_bin at the beginning)
+                    list_points_of_support.insert(0, datapoints[0])
+            else:
+                list_points_of_support.append(datapoints[0])
+            list_points_of_support.append(datapoints[-1] + 0.1) # Add last point of support such that last data point is included (half open interals in Python!)
+            if datapoints[datapoints >= list_points_of_support[-2]].size < min_n_datapoints_a_bin: # if last bin has not at least min_n_datapoints_a_bin fuse it with the one before the last bin
+                if len(list_points_of_support) > 2:     # Test if there are at least 3 points of support (only two can happen if there only constant values at the beginning and only less than n_min_datapoints_a_bin in the end)
                     list_points_of_support.pop(-2)
-            l[i]=list_points_of_support
+            l[i] = list_points_of_support
             freq_data[i] = np.histogram(data[i, :], bins=l[i])[0]
+
+
     #Check for constant features
     if constant_features != []:
         print("List of features with constant values:")
@@ -77,8 +81,8 @@ def get_mutual_information(data,number_output_functions,list_variables,min_n_dat
     for i in range(0,number_output_functions):
         list_of_features=list(range(number_output_functions,len(left_features)))
         list_of_features.insert(0,i)
-        id_features=list_variables[number_output_functions:]
-        id_features.insert(0,i)
+        id_features=np.array(list_variables)[left_features]
+        
         for j in list_of_features:
             freq_data_product = ((np.histogram2d(data[i,:], data[left_features[j], :], bins=(l[i], l[left_features[j]]))[0])) / n
             expfreq = (np.outer(freq_data[i], freq_data[left_features[j]])) / (n * n)
