@@ -23,7 +23,7 @@ import numpy as np
 
 
 
-def pfa(path, number_output_functions=1, number_sweeps=1, cluster_size=50, alpha=0.01, min_n_datapoints_a_bin=500, shuffle_feature_numbers=0, frac=1, claculate_mutual_information=0, basis_log_mutual_information=2):
+def pfa(path, number_output_functions=1, number_sweeps=1, cluster_size=50, alpha=0.01, min_n_datapoints_a_bin=500, shuffle_feature_numbers=0, frac=1, calculate_mutual_information=0, basis_log_mutual_information=2):
     # pf_ds = principal features related to output functions, pf = all principal features
     start_time=time.time()
     list_pf_ds=[]
