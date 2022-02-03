@@ -78,7 +78,7 @@ def pfa(path, number_output_functions=1, number_sweeps=1, cluster_size=50, alpha
     # Outputs a list of DataFrames where the index feature refers to the row in the csv-file.
     # The mutual information is calculated between the feature represented in the first row of the data frame and the feature referred to in the index feature column.
     # The first row is consequently the mutual information of the corresponding component of the output-function with itself
-    if claculate_mutual_information==1:
+    if calculate_mutual_information==1:
         print("Calculating mutual information")
         list_data_frame_feature_mutual_information=get_mutual_information(data,number_output_functions,pf_from_intersection,min_n_datapoints_a_bin,basis_log_mutual_information)
         for i in range(0,len(list_data_frame_feature_mutual_information)):
