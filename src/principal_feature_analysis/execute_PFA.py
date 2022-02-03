@@ -17,7 +17,7 @@ import numpy as np
 # min_n_datapoints_a_bin: minimum number of data points for each bin in the chi-square test
 # shuffle_feature_numbers: if True the number of the features is randomly shuffled
 # frac: the fraction of the dataset that is used for the analysis. The set is randomly sampled from the input csv
-# claculate_mutual_information: if True the mutual information with features from the PFA with the components of the output function is calculated
+# calculate_mutual_information: if True the mutual information with features from the PFA with the components of the output function is calculated
 # basis_log_mutual_information: basis of the logarithm used in the calculation of the mutual information
 
 
