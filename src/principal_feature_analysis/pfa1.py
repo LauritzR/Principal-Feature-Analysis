@@ -1,14 +1,20 @@
-# Algorithm 1 of PFA with :
-# 1. Adjacency Matrix based on arbitrary definition of correlation and
-# 2. no association of X with Y/output is used (not supervised).
+"""Algorithm 1 of PFA with
 
-# There are reasons why these points are not considered in the
-# original implementations. These reasons are mentioned in the paper.
+This implementation has two specific points in mind:
+1. Adjacency Matrix based on arbitrary definition of correlation and
+2. No association of X with Y/output is used (not supervised).
 
-# Particularly, tightly connected dependency graphs are not pruned (as
-# in test_data0). This does not mean that we cannot prune the nodes
-# based on redundancy or functional dependency, but rather that such
-# pruning is not unique and arbitrary removal would suffice.
+There are reasons why these points are not considered in the original
+implementations. These reasons are mentioned in the paper.
+
+Particularly, tightly connected dependency graphs are not pruned (as
+in test_data0). This does not mean that we cannot prune the nodes
+based on redundancy or functional dependency, but rather that such
+pruning is not unique and arbitrary removal would suffice. The paper
+suggests to study such multiple-node complete subgraphs separately
+and/or use the association with the output variable (Y).
+
+"""
 
 import networkx as nx
 import numpy as np
@@ -53,14 +59,34 @@ def test_data3(n=5000):
     return A    
 
 def ex_cor_fun(x, y, alt='two-sided'):
-    # Example of a custom correlation function which will work with cor_mat
+    """Example of a custom correlation function which will work with
+    cor_mat
+
+    """
     return scipy.stats.kendalltau(x, y, variant='c', alternative=alt)
 
 def cor_mat(X, meth="p", **kwargs):
-    """
-    X -- data
-    meth -- 'p' for Pearson, 's' for Spearman, 'k' for Kendall or
-            a callable that calculates correlation and p-val from two signals
+    """Correlation matrix calculation.
+
+    Input:
+
+    X: input data matrix (n_obs x n_feat)
+
+    meth: method for correlation calculation. Predefined options: 'p'
+    -- Pearson, 's' -- Spearman, 'k' -- Kendall. These use scipy.stats
+    functions pearsonr, spearmanr, and kendalltau,
+    respectively. Alternatively, if a callable/function defines custom
+    correlation function.
+
+    **kwargs: arguments to the correlation function (see ex_cor_fun in
+      this module), including the scipy.stats functions.
+
+    Output:
+
+    C: correlation matrix (n_feat x n_feat), up-triangular only
+
+    P: correlation p-values (n_feat x n_feat), up-triangular only
+
     """
     n = X.shape[1]
     C = np.zeros((n, n)) # container for cor coef, may be optimized to be sparse
@@ -88,6 +114,31 @@ def cor_mat(X, meth="p", **kwargs):
     return C, P
 
 def cor_adj_mat(X, meth='p', alpha=0.05, correct=False, **kwargs):
+    """Construct an adjacency matrix for the correlation matrix
+
+    Input:
+
+    X: input data matrix (n_obs x n_feat)
+
+    meth: method for correlation calculation. Predefined options: 'p'
+    -- Pearson, 's' -- Spearman, 'k' -- Kendall. These use scipy.stats
+    functions pearsonr, spearmanr, and kendalltau,
+    respectively. Alternatively, if a callable/function defines custom
+    correlation function.
+
+    alpha: correlation test p-value cutoff (default: 0.05)
+
+    correct: whether to correct for multiple tests (default: True)
+
+    **kwargs: arguments to the correlation function (see ex_cor_fun in
+      this module), including the scipy.stats functions.
+
+    Output:
+
+    A: boolean adjacency matrix (n_feat x n_feat), up-triangular only
+
+
+    """
     C, P = cor_mat(X, meth=meth, **kwargs)
     if correct: # simple P-val correction
         n = C.shape[1] # C/P must be square upper triangular
@@ -100,16 +151,60 @@ def cor_graph(cor_adj_mat):
     return nx.from_numpy_matrix(cor_adj_mat)
 
 def pfa1_full(X, meth='p', alpha=0.05, correct=True, rnd_seed=None, **kwargs):
-     adj = cor_adj_mat(X, meth=meth, alpha=alpha, correct=correct, **kwargs)
-     print("Adjacency matrix:")
-     print(adj)
-     gr = cor_graph(adj)
-     subgr, subgr_nodes, subgr_edges = pfa1(gr, rnd_state=rnd_seed)
-     return subgr, subgr_nodes, subgr_edges
+    """Core Algorithm 1 of PFA. Full pipelined implementation.
+
+    Input:
+
+    X: input data matrix (n_obs x n_feat)
+
+    meth: method for correlation calculation. Predefined options: 'p'
+    -- Pearson, 's' -- Spearman, 'k' -- Kendall. These use scipy.stats
+    functions pearsonr, spearmanr, and kendalltau,
+    respectively. Alternatively, if a callable/function defines custom
+    correlation function.
+
+    alpha: correlation test p-value cutoff (default: 0.05)
+
+    correct: whether to correct for multiple tests (default: True)
+
+    rnd_seed: rnd generator state (default: None, arbitrary)
+
+    **kwargs: arguments to the correlation function (see ex_cor_fun in
+      this module), including the scipy.stats functions.
+
+    Output:
+
+    Gs: list of complete subgraphs (NetworkX objects)
+
+    Gs_nodes: list of nodes in each subgraph
+
+    Gs_edges: list of edges (tuples) of each subgraph
+    
+    """
+    adj = cor_adj_mat(X, meth=meth, alpha=alpha, correct=correct, **kwargs)
+    print("Adjacency matrix:")
+    print(adj)
+    gr = cor_graph(adj)
+    subgr, subgr_nodes, subgr_edges = pfa1(gr, rnd_state=rnd_seed)
+    return subgr, subgr_nodes, subgr_edges
 
 def pfa1(graph, rnd_state=None):
-    """
-    Core Algorithm 1 of PFA.
+    """Core Algorithm 1 of PFA.
+
+    Input:
+
+    graph: NetworkX graph object representing dependency graph
+    rnd_state: rnd generator seed if reproducibility is required. The
+    default (None) uses arbitrary seed.
+
+    Output:
+
+    Gs: list of complete subgraphs (NetworkX objects)
+
+    Gs_nodes: list of nodes in each subgraph
+
+    Gs_edges: list of edges (tuples) of each subgraph
+
     """
     seed(rnd_state) # seed rnd number generator, if None, then not reproducible
     S = [graph.subgraph(c).copy() for c in nx.connected_components(graph)]
