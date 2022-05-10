@@ -1,4 +1,4 @@
-"""Algorithm 1 of PFA with
+"""Algorithm 1 of PFA
 
 This implementation has two specific points in mind:
 1. Adjacency Matrix based on arbitrary definition of correlation and
@@ -75,8 +75,8 @@ def cor_mat(X, meth="p", **kwargs):
     meth: method for correlation calculation. Predefined options: 'p'
     -- Pearson, 's' -- Spearman, 'k' -- Kendall. These use scipy.stats
     functions pearsonr, spearmanr, and kendalltau,
-    respectively. Alternatively, if a callable/function defines custom
-    correlation function.
+    respectively. Alternatively, if meth is a callable/function, it
+    defines a custom correlation function.
 
     **kwargs: arguments to the correlation function (see ex_cor_fun in
       this module), including the scipy.stats functions.
@@ -123,8 +123,8 @@ def cor_adj_mat(X, meth='p', alpha=0.05, correct=False, **kwargs):
     meth: method for correlation calculation. Predefined options: 'p'
     -- Pearson, 's' -- Spearman, 'k' -- Kendall. These use scipy.stats
     functions pearsonr, spearmanr, and kendalltau,
-    respectively. Alternatively, if a callable/function defines custom
-    correlation function.
+    respectively. Alternatively, if meth is a callable/function, it
+    defines a custom correlation function.
 
     alpha: correlation test p-value cutoff (default: 0.05)
 
@@ -136,7 +136,6 @@ def cor_adj_mat(X, meth='p', alpha=0.05, correct=False, **kwargs):
     Output:
 
     A: boolean adjacency matrix (n_feat x n_feat), up-triangular only
-
 
     """
     C, P = cor_mat(X, meth=meth, **kwargs)
@@ -160,8 +159,8 @@ def pfa1_full(X, meth='p', alpha=0.05, correct=True, rnd_seed=None, **kwargs):
     meth: method for correlation calculation. Predefined options: 'p'
     -- Pearson, 's' -- Spearman, 'k' -- Kendall. These use scipy.stats
     functions pearsonr, spearmanr, and kendalltau,
-    respectively. Alternatively, if a callable/function defines custom
-    correlation function.
+    respectively. Alternatively, if meth is a callable/function, it
+    defines a custom correlation function.
 
     alpha: correlation test p-value cutoff (default: 0.05)
 
@@ -179,7 +178,7 @@ def pfa1_full(X, meth='p', alpha=0.05, correct=True, rnd_seed=None, **kwargs):
     Gs_nodes: list of nodes in each subgraph
 
     Gs_edges: list of edges (tuples) of each subgraph
-    
+
     """
     adj = cor_adj_mat(X, meth=meth, alpha=alpha, correct=correct, **kwargs)
     print("Adjacency matrix:")
@@ -189,11 +188,13 @@ def pfa1_full(X, meth='p', alpha=0.05, correct=True, rnd_seed=None, **kwargs):
     return subgr, subgr_nodes, subgr_edges
 
 def pfa1(graph, rnd_state=None):
-    """Core Algorithm 1 of PFA.
+    """Core Algorithm 1 of PFA with random initialization of the connected
+    components (cc).
 
     Input:
 
     graph: NetworkX graph object representing dependency graph
+
     rnd_state: rnd generator seed if reproducibility is required. The
     default (None) uses arbitrary seed.
 
@@ -273,7 +274,7 @@ if __name__ == "__main__":
     print(y)
 
     print("===================================================")
-    print("Ex. 3: Test data from the package, v0 & v11 are fully independent, hierarchy via v3")
+    print("Ex. 3: Test data from the package, v0 & v1 are fully independent, hierarchy via v3")
     A = test_data2()
     x, y, z = pfa1_full(A)
 
@@ -287,3 +288,11 @@ if __name__ == "__main__":
 
     print("Sub graphs:")
     print(y)
+
+    print("===================================================")
+    print("Ex. 5: Barabasi-Albert preferential attachment graph")
+    g = nx.barabasi_albert_graph(100, 3)
+    x, y, z = pfa1(g)
+
+    print("Sub graphs:")
+    print(y)    
