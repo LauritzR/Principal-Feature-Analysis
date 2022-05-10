@@ -51,3 +51,50 @@ The principal_feature_analysis package also grants access to other functions use
 ```Python
 from principal_feature_analysis import find_relevant_principal_features, get_mutual_information, principal_feature_analysis
 ```
+
+## PFA1: Algrithm 1 of PFA with arbitrary correlation method
+
+The package contains a module to run Algorithm 1 of PFA alone on a
+dependency graph derived from arbitrary definition of correlation. The
+following functions are available from the module: `pfa1`,
+`pfa1_full`, `cor_mat`, `cor_adj_mat`, `cor_graph`.
+
+``` python
+from principal_feature_analysis import pfa1, pfa1_full, cor_mat, cor_adj_mat, cor_graph
+```
+
+### Simple interface
+
+Once data is available as `X` (`n_obs` x `n_feat`) the easiest way to
+run the PFA Algorithm 1 is:
+
+``` python
+subgr, subgr_nodes, subgr_edges = pfa1_full(X)
+```
+
+This calculates the adjacency matrix based on the default correlation
+method (Pearson) with corrected P-value cutoff of 0.05 (in fact,
+correlation tests are performed using `scipy.stats.pearsonr`). These
+parameters can be adjusted via:
+
+``` python
+subgr, subgr_nodes, subgr_edges = pfa1_full(X, meth='s', alpha=0.01, correct=False, **kwargs)
+```
+
+This will run Spearman correlation test with uncorrected alpha level of 0.01.
+
+IMPORTANT: `meth` could point to a function (a callable) that returns
+correlation and P value for any two signals (signature: `cor, pval =
+custom_cor_fun(x, y, **kwargs)`). `**kwargs` always go to the function
+defined by `meth`, even if it is a standard function, like
+`scipy.stats.spearmanr` (more on this at: `help(pfa1_full)`).
+
+### Detailed interface
+
+All stages of the calculation, wrapped in `pfa1_full`, can be
+performed separately:
+
+1. Correlation matrix and P-value matrix (see `cor_mat`).
+2. Adjacency matrix of the dependency graph (see `cor_adj_mat`).
+3. Dependency graph from the adjacency matrix (see `cor_graph`).
+4. PFA Algorithm 1 (see `pfa1`).
