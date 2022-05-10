@@ -114,7 +114,7 @@ def cor_mat(X, meth="p", **kwargs):
     return C, P
 
 def cor_adj_mat(X, meth='p', alpha=0.05, correct=False, **kwargs):
-    """Construct an adjacency matrix for the correlation matrix
+    """Construct an adjacency matrix from the correlation matrix
 
     Input:
 
@@ -147,6 +147,18 @@ def cor_adj_mat(X, meth='p', alpha=0.05, correct=False, **kwargs):
     return P < alpha
 
 def cor_graph(cor_adj_mat):
+    """Construct dependency graph from adjacency matrix.
+
+    Input:
+
+    cor_adj_mat: numpy 2d array of the adjacency matrix. In this
+    module, it is a boolean and upper-triangular matrix.
+
+    Output:
+
+    NetworkX graph object of the dependency graph.
+
+    """
     return nx.from_numpy_matrix(cor_adj_mat)
 
 def pfa1_full(X, meth='p', alpha=0.05, correct=True, rnd_seed=None, **kwargs):
