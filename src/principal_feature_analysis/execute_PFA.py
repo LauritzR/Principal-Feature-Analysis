@@ -31,8 +31,15 @@ def pfa(path, number_output_functions=1, number_sweeps=1, cluster_size=50, alpha
 
     # The csv file's content is an m x n Matrix with m - number components of output-function = number features and n = number of data points
     # where the first number components of output-function rows contain the value of the vector-valued output function for each of the n data points
-    # e.g. in case of a one-dimensional output function, the first row can be the label for each data point
-    data = pd.read_csv(path, sep=',', header=None)
+    # e.g. in case of a one-dimensional output function, the first row can be the label for each data point.
+    # Instead of a CSV file you can also pass a pandas dataframe.
+    if isinstance(path, str):
+        data = pd.read_csv(path, sep=',', header=None)
+    elif isinstance(path, pd.DataFrame):
+        data = path
+    else:
+        raise NotImplementedError(f"path type {type(path)} has not been implemented")
+
     for sweep in range(0,number_sweeps):
         print("Sweep number: " + str(sweep+1))
         pf_ds,pf,indices_principal_feature_values=find_relevant_principal_features(data,number_output_functions,cluster_size,alpha,min_n_datapoints_a_bin,shuffle_feature_numbers,frac)

@@ -19,7 +19,7 @@ pfa(path*, number_output_functions, number_sweeps, cluster_size, alpha, min_n_da
 ```
 
 ### Parameters
-- **path (String, required):** Path to the input CSV file.
+- **path (String or pandas DataFrame, required):** Path to the input CSV file or pandas dataframe.
 - **number_output_functions (int, default=1):** Number of output features that are to be modeled, i.e. the number of components of the vector-valued output-function. The values are stored in the first number_output_functions rows of the csv-file.
 - **number_sweeps (int, default=1):** Number of sweeps of the PFA. The result of the last sweep is returned. In addition, the return of each sweep are interesected and returned as well.
 - **cluster_size (int, default=50):** Number of nodes of a subgraph in the principal_feature_analysis.
