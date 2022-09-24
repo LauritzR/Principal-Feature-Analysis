@@ -16,6 +16,8 @@ def find_relevant_principal_features(data,number_output_functions,cluster_size,a
     freq_data = [0 for i in range(0, m)] # list of histograms
     left_features = [i for i in range(0, m)]  # list of features that is step by step reduced to the relevant ones
     constant_features = []
+    features_too_few_different_values = []  # List of features that have too few different values regarding min_n_datapoints_a_bin
+                                            # such that there is only one bin with the discretization procedure
 
     # remove constant features and binning (discretizing the continuous values of our features)
     for i in range(0, m): 
@@ -33,7 +35,7 @@ def find_relevant_principal_features(data,number_output_functions,cluster_size,a
             last_index = 0
             # go through the data points and bin them
             for point in range(0, datapoints.size):
-                if point >= (datapoints.size - 1):  # if end of the data points leave the for-loop
+                if point >= (datapoints.size - 1):  # if end of the data points, then leave the for-loop
                     break
                 # close a bin if there are at least min_n_datapoints_a_bin and the next value is bigger
                 if datapoints[last_index:point + 1].size >= min_n_datapoints_a_bin and datapoints[point] < datapoints[point + 1]:
@@ -50,9 +52,17 @@ def find_relevant_principal_features(data,number_output_functions,cluster_size,a
                     list_points_of_support.pop(-2)
             l[i] = list_points_of_support
             freq_data[i] = np.histogram(data[i, :], bins=l[i])[0]
+            if len(freq_data[i]) <= 1:
+                print("Feature #"f"{i}" " has too few different values for the granularity of the binning controlled by min_n_datapoints_a_bin")
+                left_features.remove(i)
+                features_too_few_different_values.append(i)
     print("Binning done!")
-    print("List of features with constant values:")
+    print("List of features with constant values (" + str(len(constant_features)) + " features):")
     print(constant_features)
+    print("\n\n")
+    print("List of features with too few different values (" + str(len(features_too_few_different_values)) + " features):")
+    print(features_too_few_different_values)
+
     for id_output in range(0,number_output_functions):
         if id_output in constant_features or len(freq_data[id_output]) < 2:  # Warn if the output function is constant e.g. due to an unsuitable binning
             print("Warning: System state " + str(id_output) +  " is constant!")
