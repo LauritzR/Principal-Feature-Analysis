@@ -67,7 +67,7 @@ def principal_feature_analysis(cluster_size,data,number_output_functions,freq_da
             
             # see paper Algorithm 1
             # ...create subgraphs based on adjacency matrix
-            G=nx.from_numpy_matrix(adjm)
+            G=nx.from_numpy_array(adjm)
             S = [G.subgraph(c).copy() for c in nx.connected_components(G)]
 
             list_graphs_to_divide=[]    # list of graphs to divide
