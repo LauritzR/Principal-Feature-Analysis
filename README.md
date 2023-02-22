@@ -19,7 +19,7 @@ pfa(path*, number_output_functions, number_sweeps, cluster_size, alpha, min_n_da
 ```
 
 ### Parameters
-- **path (String, required):** Path to the input CSV file. The format of the auf the csv file is a matrix where in each column there is a sample. The first number_output_functions rows of each sample vector represent the labels of each output function for this sample and the subsequent rows represent the value of each feature of this sample. Consequently, the format is number rows = (number_output_functions + number features) times number columns = number samples or data points, respectively. All entries in this matrix are supposed to be numeric.
+- **path (String, required):** Path to the input CSV file. The format of the csv file is a matrix where in each column there is a sample. The first number_output_functions rows of each sample vector represent the labels of each output function for this sample and the subsequent rows represent the value of each feature of this sample. Consequently, the format is number rows = (number_output_functions + number features) times number columns = number samples or data points, respectively. All entries in this matrix are supposed to be numeric.
 - **number_output_functions (int, default=1):** Number of output features that are to be modeled, i.e. the number of components of the vector-valued output-function. The values are stored in the first number_output_functions rows of the csv-file.
 - **number_sweeps (int, default=1):** Number of sweeps of the PFA. The result of the last sweep is returned. In addition, the return of each sweep are interesected and returned as well.
 - **cluster_size (int, default=50):** Number of nodes of a subgraph in the principal_feature_analysis.
