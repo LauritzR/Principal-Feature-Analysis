@@ -102,7 +102,7 @@ def find_relevant_principal_features(data,number_output_functions,cluster_size,a
                         counter_bins_less_than5_relevant_principal_features += 1
                     if sum(expfreq.flatten() < 1) > 0:
                         counter_bins_less_than1_relevant_principal_features += 1
-                    pv = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten(),ddof=-1)[1]
+                    pv = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten(),ddof=(freq_data_product.shape[0]-1)+(freq_data_product.shape[1]-1))[1]
                     # ddof=-1 to have the degrees of freedom of the chi square eaual the number of bins, see corresponding paper (Appendix) for details
                     # if p-value pv is less than alpha the hypothesis that j is independent of the output function is rejected
                     if pv <= alpha:
