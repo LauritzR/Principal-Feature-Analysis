@@ -56,7 +56,7 @@ def principal_feature_analysis(cluster_size,data,number_output_functions,freq_da
                             counter_bin_less_than5 += 1
                         if sum(expfreq.flatten() < 1) > 0:
                             counter_bin_less_than1 += 1
-                        pv = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten(),ddof=-1)[1]
+                        pv = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten(),ddof=(freq_data_product.shape[0]-1)+(freq_data_product.shape[1]-1))[1]
                         # ddof=-1 to have the degrees of freedom of the chi square eaual the number of bins, see corresponding paper (Appendix) for details
                         # if p-value pv is less than alpha the hypothesis that j is independent of i is rejected
                         if pv <= alpha:
