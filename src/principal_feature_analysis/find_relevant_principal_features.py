@@ -103,7 +103,11 @@ def find_relevant_principal_features(data,number_output_functions,cluster_size,a
                     if sum(expfreq.flatten() < 1) > 0:
                         counter_bins_less_than1_relevant_principal_features += 1
                     pv = scipy.stats.chisquare(freq_data_product.flatten(), expfreq.flatten(),ddof=(freq_data_product.shape[0]-1)+(freq_data_product.shape[1]-1))[1]
-                    # ddof=-1 to have the degrees of freedom of the chi square eaual the number of bins, see corresponding paper (Appendix) for details
+                    # According to the documentation of scipy.stats.chisquare, the degrees of freedom is k-1 - ddof where ddof=0 by default and k=freq_data_product.shape[0]*freq_data_product.shape[0]. 
+                    # According to literatur, the chi square test statistic for a test of independence (r x m contingency table) is approximately chi square distributed (under some assumptions) with degrees of freedom equal 
+                    # freq_data_product.shape[0]-1)*(freq_data_product.shape[1]-1) = freq_data_product.shape[0]*freq_data_product.shape[1] - freq_data_product.shape[0] - freq_data_product.shape[1] + 1. 
+                    # Consequently, ddof is set equal freq_data_product.shape[0]-1+freq_data_product.shape[1]-1 to adjust the degrees of freedom accordingly.
+
                     # if p-value pv is less than alpha the hypothesis that j is independent of the output function is rejected
                     if pv <= alpha:
                         dependent=1
