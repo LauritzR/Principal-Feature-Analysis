@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="principal-feature-analysis",
-    version="1.0.8",
+    version="1.0.9",
     author="Tim Breitenbach & Lauritz Rasbach",
     author_email="tim.breitenbach@mathematik.uni-wuerzburg.de, rasbachlauritz@googlemail.com",
     description="The first package for Principal Feature Analysis",

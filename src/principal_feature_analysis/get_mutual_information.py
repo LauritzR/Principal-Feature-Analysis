@@ -81,7 +81,7 @@ def get_mutual_information(data,number_output_functions,list_variables,min_n_dat
     for i in range(0,number_output_functions):
         list_of_features=list(range(number_output_functions,len(left_features)))
         list_of_features.insert(0,i)
-        id_features=np.array(list_variables)[left_features]
+        id_features=np.array(list_variables)[list_of_features]
         
         for j in list_of_features:
             freq_data_product = ((np.histogram2d(data[i,:], data[left_features[j], :], bins=(l[i], l[left_features[j]]))[0])) / n
