@@ -24,7 +24,7 @@ pfa(path*, number_output_functions, number_sweeps, cluster_size, alpha, min_n_da
 - **number_sweeps (int, default=1):** Number of sweeps of the PFA. The result of the last sweep is returned. In addition, the return of each sweep are interesected and returned as well.
 - **cluster_size (int, default=50):** Number of nodes of a subgraph in the principal_feature_analysis.
 - **alpha (float, default=0.01):** Level of significance.
-- **min_n_data_points_a_bin (int, default=500):**: The minimum number of data points for each bin in the chi-square test.
+- **min_n_datapoints_a_bin (int, default=500):**: The minimum number of data points for each bin in the chi-square test.
 - **shuffle_feature_numbers (bool, default=False):** If True the number of the features is randomly shuffled.
 - **frac (int, default=1):** The fraction of the dataset that is used for the analysis. The set is randomly sampled from the input csv.
 - **calculate_mutual_information (bool, default=False):** If True the mutual information with features from the PFA with the system state is calculated.
